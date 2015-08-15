@@ -1,119 +1,92 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+public class Main {
 
+	static int[] primes = new int[25];
+	static int[] n_factors = new int[25];
+	static int[] d_factors = new int[25];
 
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		seive();
+		while (true) {
+			String[] in = br.readLine().trim().split(" ");
 
- class Main {
-	 
-static boolean divisible = true;
-static int N;
-static int[][]nfactors = new int[100+1][100];
-static int[]dfactors;
+			int n = Integer.parseInt(in[0]);
+			long d = Long.parseLong(in[1]);
+			
 
-	public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
-		for(int i =2;i<=100;i++)
-		{
-			for(int j=i;j>=2;j--){
-			nFactorize(i,j);
-			}
-		}
-		N = in.nextInt();
-
-		long D = in.nextLong();
-		while(!(N==0 && D==0))
-		{
-			dfactors = new int[100+1];
-			if(D<0)
-				D*=-1;
-			if((N==0|| N==1) && D==1){
-				System.out.println("1");
-			}else{
-			factorizeD(D);
-			if(!divisible){
-				System.out.println("0");
-			}else 
-			{
+			if (n == 0 && d == 0)
+				break;
+			if ((n == 0 || n==1) && (d == 1||d==-1))
+				System.out.println(1);
+			else {
+				Arrays.fill(n_factors, 0);
+				Arrays.fill(d_factors, 0);
+				
 				long ans = 1;
-				for(int i=0;i<100;i++)
-				{
-					if(dfactors[i]<=nfactors[N][i] && !(dfactors[i]==0 && nfactors[N][i]==0))
-					{
-						ans*=(nfactors[N][i]-dfactors[i]+1);
-						
-					}else if(dfactors[i]>nfactors[N][i] )
-					{
-						divisible = false;
-						break;
+
+				d = (long)Math.abs(d);
+				for (int i = 0; i < 25; i++) {
+
+					int temp = n;
+					if (temp / primes[i] != 0) {
+						while (temp != 0) {
+							n_factors[i] += temp / primes[i];
+							temp /= primes[i];
+
+						}
+					} else {
+						n_factors[i] = 0;
+
+					}
+					if (d % primes[i] == 0) {
+						while (d % primes[i] == 0) {
+							d_factors[i]++;
+							d /= primes[i];
+						}
+					} else {
+						d_factors[i] = 0;
+					}
+					if (d_factors[i] < n_factors[i]) {
+						ans *= ((n_factors[i] - d_factors[i]) + 1);
+					} else if(d_factors[i] > n_factors[i]){
+						ans = 0;
 					}
 				}
-				if(divisible){
-				System.out.println(ans);
-				}else
-				{
-					System.out.println("0");
+				if(d<100)
+					System.out.println(ans);
+				else
+					System.out.println(0);
+
+			}
+		}
+	}
+
+	public static void seive() {
+		boolean[] is_prime = new boolean[100];
+		Arrays.fill(is_prime, true);
+		is_prime[0] = false;
+		is_prime[1] = false;
+		for (int i = 2; i < 100 / i; i++) {
+			if (is_prime[i]) {
+				for (int j = i * i; j < 100; j += i) {
+					is_prime[j] = false;
+
 				}
 			}
-			
 		}
-			N = in.nextInt();
-
-			divisible = true;
-			D = in.nextLong();
+		int index = 0;
+		for (int i = 0; i < 100; i++) {
+			if (is_prime[i]) {
+				primes[index++] = i;
+			}
 		}
-		in.close();
 
-	}
-	
-	public static void factorizeD(long D)
-	{
-		 while (D%2 == 0)
-		    {
-		    	dfactors[2]++;
-		        D = D/2;
-		    }
-		 
-		    for (int i = 3; i <= D/i; i = i+2)
-		    {
-		    	
-		        while (D%i == 0)
-		        {
-		        	if(i>100)
-		        	{
-		        		divisible = false;
-		        		return;
-		        	}
-		        	dfactors[i]++;
-		            D = D/i;
-		        }
-		    }
-		    if (D > 100)
-		    	divisible = false;
-		    else if(D>2)
-		    	dfactors[(int) D]++;
-		    	
-		    	
-		    	
-	}
-	public static void nFactorize(int x ,int n)
-	{
-		while (n%2 == 0)
-	    {
-	    	nfactors[x][2]++;
-	        n = n/2;
-	    }
-	 
-	    for (int i = 3; i <= n/i; i = i+2)
-	    {
-	    	
-	        while (n%i == 0)
-	        {
-	        	nfactors[x][i]++;
-	            n = n/i;
-	        }
-	    }
-	    if(n>2)
-	    	nfactors[x][n]++;
 	}
 
 }
+
