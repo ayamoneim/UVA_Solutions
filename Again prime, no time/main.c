@@ -93,13 +93,11 @@ int main()
     int test_cases;
     scanf("%d",&test_cases);
     int cases=0;
-    while(test_cases)
-    {
+    while(test_cases){
         int n,m;
         scanf("%d %d",&m,&n);
         cases++;
-        if(m==0)
-        {
+        if(m==0){
             printf("Case %d:\nImpossible to divide\n",cases);
         }else
         {
