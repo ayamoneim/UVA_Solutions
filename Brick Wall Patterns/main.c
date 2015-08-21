@@ -25,7 +25,6 @@ int main()
 
     while(scanf("%d",&n) && n){
         printf("%lld\n",brickWall(n));
-
     }
     return 0;
 }
