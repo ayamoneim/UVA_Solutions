@@ -23,8 +23,7 @@ int main()
 {
     int n;
 
-    while(scanf("%d",&n) && n)
-    {
+    while(scanf("%d",&n) && n){
         printf("%lld\n",brickWall(n));
 
     }
